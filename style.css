@@ -921,7 +921,12 @@ footer small {
 @media (max-width: 700px) {
 
     .navbar {
-        padding: 20px 0;
+        width: 90%;
+        padding: 18px 0;
+    }
+
+    .logo {
+        font-size: 18px;
     }
 
     .navbar nav {
@@ -929,31 +934,56 @@ footer small {
     }
 
     .hero {
-        margin: 55px auto 75px;
+        width: 90%;
+        margin: 45px auto 65px;
+    }
+
+    .hero-badge {
+        font-size: 9px;
+        padding: 7px 11px;
+        letter-spacing: 2px;
     }
 
     .hero h1 {
-        font-size: clamp(54px, 16vw, 80px);
-        letter-spacing: -4px;
+        font-size: clamp(48px, 15vw, 72px);
+        letter-spacing: -3px;
+        line-height: 0.92;
     }
 
     .hero p {
-        font-size: 16px;
+        font-size: 15px;
+        line-height: 1.55;
+        margin: 22px auto 26px;
+    }
+
+    .hero-button {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 20px;
+    }
+
+    .calculator-section,
+    .result-section {
+        width: 92%;
+        margin-bottom: 65px;
     }
 
     .section-heading {
-        align-items: flex-start;
-        gap: 15px;
+        margin-bottom: 16px;
     }
 
-    .step-pill {
-        display: none;
+    .section-heading h2 {
+        font-size: 28px;
     }
 
     .calculator-card,
     .result-card {
-        padding: 23px;
-        border-radius: 22px;
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 21px;
     }
 
     .form-grid {
@@ -962,15 +992,81 @@ footer small {
     }
 
     .categories {
-        gap: 7px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
     }
 
     .category {
-        flex: 1 1 calc(50% - 7px);
+        width: 100%;
+        padding: 11px 8px;
+        font-size: 12px;
+    }
+
+    /* Make the 5th category centered */
+    .category:last-child {
+        grid-column: 1 / -1;
+        width: 50%;
+        justify-self: center;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+        font-size: 16px;
+        padding: 14px;
+    }
+
+    .input-wrapper input {
+        padding-left: 30px;
+    }
+
+    input[type="range"] {
+        height: 7px;
+        margin-top: 4px;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+    }
+
+    .range-labels {
+        font-size: 10px;
+    }
+
+    .analyze-button {
+        min-height: 52px;
+        font-size: 14px;
+    }
+
+    .result-top {
+        gap: 12px;
+    }
+
+    .result-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
     }
 
     .result-top h2 {
-        font-size: 31px;
+        font-size: 30px;
+        letter-spacing: -1px;
+    }
+
+    .result-description {
+        font-size: 15px;
+        line-height: 1.55;
+        margin: 20px 0;
+    }
+
+    .score-card {
+        padding: 15px;
     }
 
     .stats-grid {
@@ -978,20 +1074,59 @@ footer small {
     }
 
     .stat {
-        border-right: 1px solid var(--border);
-        border-bottom: 1px solid var(--border);
+        padding: 14px;
     }
 
-    .stat:nth-child(2n) {
-        border-right: none;
+    .stat span {
+        font-size: 10px;
     }
 
-    .stat:nth-child(3),
-    .stat:nth-child(4) {
-        border-bottom: none;
+    .stat strong {
+        font-size: 15px;
+    }
+
+    .insight-box {
+        padding: 16px;
+    }
+
+    .better-move-box {
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    #betterMoveText {
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    .reset-button {
+        min-height: 48px;
+    }
+
+    .how-section {
+        width: 92%;
+        margin-bottom: 65px;
     }
 
     .feature-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .feature-card {
+        padding: 20px;
+    }
+
+    .ad-section {
+        width: 92%;
+        margin-bottom: 65px;
+    }
+
+    .ad-placeholder {
+        height: 70px;
+    }
+
+    footer {
+        padding: 45px 20px 30px;
     }
 }
