@@ -68,6 +68,8 @@ Instructions:
 - Do not claim certainty about the user's financial future.
 - Keep the response between 2 and 4 sentences.
 - Sound like a smart friend, not a financial textbook.
+- Do not write "Better Move:" at the beginning.
+- Return only the recommendation itself.
 - Do not mention that you are an AI.
 `;
 
