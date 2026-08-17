@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Should I Do It?</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">Should I Do It?</div>
+        <div class="tagline">Think twice. Decide better.</div>
+    </header>
+
+    <main class="container">
+
+        <section class="hero">
+            <p class="eyebrow">BEFORE YOU DO IT...</p>
+
+            <h1>
+                Should I<br>
+                <span>Do It?</span>
+            </h1>
+
+            <p class="hero-text">
+                Tell us what you're thinking about and we'll help you decide.
+            </p>
+        </section>
+
+        <section class="card">
+
+            <div class="form-group">
+                <label for="decision">What are you thinking about?</label>
+                <input type="text" id="decision" placeholder="Example: Buy a $1,000 gaming PC">
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label for="price">Price ($)</label>
+                    <input type="number" id="price" placeholder="1000" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="income">Monthly income ($)</label>
+                    <input type="number" id="income" placeholder="2500" min="0">
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                <div class="form-group">
+                    <label for="savings">Savings ($)</label>
+                    <input type="number" id="savings" placeholder="1500" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="debt">Debt ($)</label>
+                    <input type="number" id="debt" placeholder="3000" min="0">
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="wantLevel">
+                    How badly do you want it?
+                    <span id="wantValue">5/10</span>
+                </label>
+
+                <input type="range" id="wantLevel" min="1" max="10" step="1" value="5">
+            </div>
+
+            <button type="button" id="analyzeButton">
+                ANALYZE
+            </button>
+
+        </section>
+
+       <section id="result" class="result hidden">
+
+    <div id="resultIcon" class="result-icon">?</div>
+
+    <p id="resultLabel" class="result-label">
+        VERDICT
+    </p>
+
+    <h2 id="resultTitle">
+        Let's see...
+    </h2>
+
+    <p id="resultText">
+        Enter your information above.
+    </p>
+
+    <div class="score-section">
+        <div class="score-header">
+            <span>Decision score</span>
+            <strong id="scoreNumber">0/100</strong>
+        </div>
+
+        <div class="score-bar">
+            <div id="scoreFill"></div>
+        </div>
+
+        <p id="riskText">Risk level: Unknown</p>
+    </div>
+
+    <div class="recommendation">
+
+        <strong>Why?</strong>
+
+        <p id="recommendationText">
+            Complete the form to get your recommendation.
+        </p>
+
+    </div>
+
+    <div class="better-move">
+
+        <strong>Better move</strong>
+
+        <p id="betterMoveText">
+            —
+        </p>
+
+    </div>
+
+    <button type="button" id="resetButton" class="secondary-button">
+        START OVER
+    </button>
+
+</section>
+
+        <section class="ad-space">
+
+            <span>ADVERTISEMENT</span>
+
+            <div class="ad-placeholder">
+                Your ad could appear here
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Should I Do It? © 2026</p>
+        <p>Not financial advice. Use your judgment.</p>
+    </footer>
+
+    <script src="./script.js" defer></script>
+
+</body>
+
+</html>
