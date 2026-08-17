@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    console.log("Should I Do It? JavaScript loaded.");
 
     const wantLevel = document.getElementById("wantLevel");
     const wantValue = document.getElementById("wantValue");
@@ -7,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const resetButton = document.getElementById("resetButton");
 
     const result = document.getElementById("result");
-
     const resultIcon = document.getElementById("resultIcon");
     const resultTitle = document.getElementById("resultTitle");
     const resultText = document.getElementById("resultText");
@@ -22,294 +22,303 @@ document.addEventListener("DOMContentLoaded", () => {
     const betterMoveText =
         document.getElementById("betterMoveText");
 
+    const statPrice =
+        document.getElementById("statPrice");
 
-    // -------------------------
-    // SLIDER
-    // -------------------------
+    const statIncome =
+        document.getElementById("statIncome");
 
-    function updateWantValue() {
-        wantValue.textContent = `${wantLevel.value}/10`;
+    const statSavings =
+        document.getElementById("statSavings");
+
+    const statDebt =
+        document.getElementById("statDebt");
+
+    const categories =
+        document.querySelectorAll(".category");
+
+    // Make sure the important elements actually exist.
+    if (!wantLevel || !wantValue || !analyzeButton || !resetButton) {
+        console.error("Required page elements are missing.");
+        return;
     }
 
-    wantLevel.addEventListener("input", updateWantValue);
+    let selectedCategory = "purchase";
 
-    updateWantValue();
+    // -----------------------------
+    // CATEGORY BUTTONS
+    // -----------------------------
 
+    categories.forEach((category) => {
+        category.addEventListener("click", () => {
+            categories.forEach((item) => {
+                item.classList.remove("active");
+            });
 
-    // -------------------------
+            category.classList.add("active");
+            selectedCategory = category.dataset.category;
+        });
+    });
+
+    // -----------------------------
+    // SLIDER
+    // -----------------------------
+
+    function updateSlider() {
+        const value = Number(wantLevel.value);
+        const min = Number(wantLevel.min);
+        const max = Number(wantLevel.max);
+
+        const percentage =
+            ((value - min) / (max - min)) * 100;
+
+        wantValue.textContent = `${value}/10`;
+
+        wantLevel.style.background = `
+            linear-gradient(
+                to right,
+                #ff4d4d 0%,
+                #ff4d4d ${percentage}%,
+                #dededb ${percentage}%,
+                #dededb 100%
+            )
+        `;
+    }
+
+    wantLevel.addEventListener("input", updateSlider);
+    updateSlider();
+
+    // -----------------------------
     // ANALYZE
-    // -------------------------
+    // -----------------------------
 
     analyzeButton.addEventListener("click", () => {
+        console.log("Analyze button clicked.");
 
         const decision =
-            document.getElementById("decision").value.trim();
+            document.getElementById("decision")?.value.trim();
 
         const price =
-            Number(document.getElementById("price").value);
+            Number(document.getElementById("price")?.value);
 
         const income =
-            Number(document.getElementById("income").value);
+            Number(document.getElementById("income")?.value);
 
         const savings =
-            Number(document.getElementById("savings").value) || 0;
+            Number(document.getElementById("savings")?.value) || 0;
 
         const debt =
-            Number(document.getElementById("debt").value) || 0;
+            Number(document.getElementById("debt")?.value) || 0;
 
         const want =
             Number(wantLevel.value);
-
-
-        // Validation
 
         if (!decision) {
             alert("Tell us what you're thinking about.");
             return;
         }
 
-        if (price <= 0) {
+        if (!price || price <= 0) {
             alert("Enter a valid price.");
             return;
         }
 
-        if (income <= 0) {
+        if (!income || income <= 0) {
             alert("Enter your monthly income.");
             return;
         }
 
-
-        // -------------------------
-        // SCORE
-        // -------------------------
-
         let score = 50;
-
         const reasons = [];
 
         const incomeRatio = price / income;
-        const savingsRatio = savings > 0 ? price / savings : Infinity;
 
+        const savingsRatio =
+            savings > 0
+                ? price / savings
+                : Infinity;
 
         // PRICE VS INCOME
-
         if (incomeRatio >= 0.75) {
-
             score -= 30;
-
             reasons.push(
-                "The purchase is extremely large compared with your monthly income."
+                "This purchase is very large compared with your monthly income."
             );
-
         } else if (incomeRatio >= 0.50) {
-
             score -= 20;
-
             reasons.push(
-                "The purchase represents a very large portion of your monthly income."
+                "This purchase would take a large chunk of your monthly income."
             );
-
         } else if (incomeRatio >= 0.25) {
-
-            score -= 10;
-
+            score -= 9;
             reasons.push(
-                "The purchase represents a noticeable portion of your income."
+                "This purchase represents a noticeable portion of your income."
             );
-
         } else {
-
             score += 8;
         }
 
-
         // SAVINGS
-
-        if (savings <= 0) {
-
-            score -= 15;
-
+        if (savings === 0) {
+            score -= 8;
             reasons.push(
-                "You don't currently have savings available for this purchase."
+                "You haven't listed any savings for this purchase."
             );
-
         } else if (savingsRatio >= 1) {
-
-            score -= 25;
-
+            score -= 24;
             reasons.push(
-                "The purchase costs more than your current savings."
+                "This purchase would cost more than your current savings."
             );
-
         } else if (savingsRatio >= 0.75) {
-
-            score -= 20;
-
+            score -= 17;
             reasons.push(
-                "It would consume most of your savings."
+                "It would use most of your savings."
             );
-
-        } else if (savingsRatio >= 0.40) {
-
-            score -= 10;
-
+        } else if (savingsRatio >= 0.50) {
+            score -= 8;
             reasons.push(
-                "It would take a significant chunk of your savings."
+                "It would use a meaningful portion of your savings."
             );
-
-        } else {
-
-            score += 10;
+        } else if (savingsRatio <= 0.20) {
+            score += 7;
         }
 
-
         // DEBT
-
         if (debt >= income * 2) {
-
-            score -= 30;
-
+            score -= 28;
             reasons.push(
-                "Your debt is very high compared with your monthly income."
+                "Your debt is very high relative to your monthly income."
             );
-
         } else if (debt >= income) {
-
-            score -= 20;
-
+            score -= 17;
             reasons.push(
                 "Your existing debt makes this purchase considerably riskier."
             );
-
         } else if (debt > 0) {
-
-            score -= 8;
-
+            score -= 6;
             reasons.push(
                 "You already have outstanding debt."
             );
         }
 
-
         // WANT LEVEL
-
         if (want >= 9) {
-
             score += 8;
-
         } else if (want >= 7) {
-
-            score += 4;
-
+            score += 5;
         } else if (want <= 3) {
-
-            score -= 8;
-
+            score -= 7;
             reasons.push(
-                "You don't seem very interested in it."
+                "You're not particularly excited about this purchase."
             );
         }
 
+        // CATEGORY
+        if (selectedCategory === "travel" && want <= 4) {
+            score -= 3;
+            reasons.push(
+                "A low-priority trip is easier to postpone than a necessity."
+            );
+        }
 
         score = Math.round(
             Math.max(0, Math.min(100, score))
         );
 
-
-        // -------------------------
-        // VERDICT
-        // -------------------------
-
         let title;
-        let text;
+        let description;
         let betterMove;
         let icon;
         let risk;
-
+        let iconBackground;
+        let iconColor;
+        let scoreColor;
 
         if (score >= 75) {
-
             icon = "✓";
-            title = "Go For It";
+            title = "Probably Do It";
             risk = "Low risk";
 
-            text =
-                `"${decision}" looks reasonably affordable based on what you entered.`;
+            description =
+                `"${decision}" looks reasonably comfortable based on the information you gave us.`;
 
             betterMove =
-                "If this is something you've wanted for a while, set a spending limit and go for it without touching money you need for essentials.";
+                "You can probably afford this. Just make sure the purchase doesn't interfere with your essential bills, savings goals, or other priorities.";
 
-            resultIcon.style.background = "#dff7e5";
-            resultIcon.style.color = "#16803c";
-
+            iconBackground = "#dff7e5";
+            iconColor = "#16803c";
+            scoreColor = "#2f9e44";
 
         } else if (score >= 55) {
-
             icon = "?";
             title = "Think About It";
             risk = "Moderate risk";
 
-            text =
-                `"${decision}" isn't necessarily a bad move, but your situation suggests waiting or comparing alternatives first.`;
+            description =
+                `"${decision}" isn't necessarily a bad move, but there are a few reasons to slow down before deciding.`;
 
             betterMove =
-                "Wait a little, shop around, or find a cheaper alternative. If you still want it later, reassess.";
+                "Give yourself a little time before buying. Compare alternatives, think about what else that money could do for you, and see if you still want it after the excitement fades.";
 
-            resultIcon.style.background = "#fff3cd";
-            resultIcon.style.color = "#a46b00";
-
+            iconBackground = "#fff3cd";
+            iconColor = "#a46b00";
+            scoreColor = "#d99900";
 
         } else {
-
             icon = "✕";
             title = "Probably Don't";
             risk = "High risk";
 
-            text =
-                `"${decision}" looks like a risky move given your current financial situation.`;
+            description =
+                `"${decision}" looks like a risky move based on your current financial situation.`;
 
             betterMove =
-                "Delay the purchase and redirect that money toward savings or debt. You can always buy it later.";
+                "I'd hold off for now and put the money toward savings or debt instead. You can always come back to this purchase later when your situation is stronger.";
 
-            resultIcon.style.background = "#ffe1e1";
-            resultIcon.style.color = "#c62828";
+            iconBackground = "#ffe1e1";
+            iconColor = "#c62828";
+            scoreColor = "#ff4d4d";
         }
 
-
-        // -------------------------
-        // DISPLAY
-        // -------------------------
-
         resultIcon.textContent = icon;
+        resultIcon.style.background = iconBackground;
+        resultIcon.style.color = iconColor;
 
         resultTitle.textContent = title;
-
-        resultText.textContent = text;
+        resultText.textContent = description;
 
         scoreNumber.textContent = `${score}/100`;
+        riskText.textContent = `Risk level: ${risk}`;
 
         scoreFill.style.width = `${score}%`;
-
-        riskText.textContent = `Risk level: ${risk}`;
+        scoreFill.style.background = scoreColor;
 
         recommendationText.textContent =
             reasons.length > 0
                 ? reasons.slice(0, 3).join(" ")
                 : "Your numbers look fairly comfortable.";
 
-        betterMoveText.textContent = betterMove;
+        betterMoveText.textContent = "Thinking...";
 
+        generateAIBetterMove({
+            decision,
+            price,
+            income,
+            savings,
+            debt,
+            want,
+            score,
+            verdict: title
+        });
 
-        // Result bar styling
+        statPrice.textContent = money(price);
+        statIncome.textContent = money(income);
+        statDebt.textContent = money(debt);
 
-        if (score >= 75) {
-            scoreFill.style.background = "#2f9e44";
-        } else if (score >= 55) {
-            scoreFill.style.background = "#e09f00";
-        } else {
-            scoreFill.style.background = "#ff4d4d";
-        }
-
+        statSavings.textContent =
+            savings > 0
+                ? `${Math.round((price / savings) * 100)}%`
+                : "—";
 
         result.classList.remove("hidden");
 
@@ -317,16 +326,13 @@ document.addEventListener("DOMContentLoaded", () => {
             behavior: "smooth",
             block: "start"
         });
-
     });
 
-
-    // -------------------------
-    // START OVER
-    // -------------------------
+    // -----------------------------
+    // RESET
+    // -----------------------------
 
     resetButton.addEventListener("click", () => {
-
         document.getElementById("decision").value = "";
         document.getElementById("price").value = "";
         document.getElementById("income").value = "";
@@ -335,7 +341,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         wantLevel.value = 5;
 
-        updateWantValue();
+        categories.forEach((item) => {
+            item.classList.remove("active");
+        });
+
+        if (categories[0]) {
+            categories[0].classList.add("active");
+        }
+
+        selectedCategory = "purchase";
+
+        updateSlider();
 
         result.classList.add("hidden");
 
@@ -343,7 +359,44 @@ document.addEventListener("DOMContentLoaded", () => {
             top: 0,
             behavior: "smooth"
         });
-
     });
 
+    function money(value) {
+        return new Intl.NumberFormat("en-CA", {
+            style: "currency",
+            currency: "CAD",
+            maximumFractionDigits: 0
+        }).format(value);
+    }
+
+    async function generateAIBetterMove(data) {
+        try {
+            const response = await fetch("/api/better-move", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.error || "AI request failed."
+                );
+            }
+
+            betterMoveText.textContent =
+                result.betterMove;
+
+        } catch (error) {
+            console.error("AI error:", error);
+
+            betterMoveText.textContent =
+                "We couldn't generate the personalized recommendation right now. The basic recommendation above is still available.";
+        }
+    }
 });
